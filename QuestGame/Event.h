@@ -1,26 +1,46 @@
 #pragma once
+#include <vector>
+
 namespace game {
+	
+	enum class EventType
+	{
+		Resize,
+		MouseButtonPress,
+		MouseButtonRelease,
+		MouseMove,
+		MouseDoubleClick,
+		KeyPress,
+		KeyRelease,
+		Update,
+		Render
+	};
+
+	enum MouseButton
+	{
+
+	};
+
+	enum ModifierKeys
+	{
+
+	};
+
+	enum Keys
+	{
+
+	};
+
 	class Event
 	{
 	public:
-		Event();
+		Event(EventType type);
 		~Event();
 
-		enum Type
-		{
-			Resize,
-			MouseButtonPress,
-			MouseButtonRelease,
-			MouseMove,
-			MouseDoubleClick,
-			KeyPress,
-			KeyRelease,
-			Update,
-			Render
-		};
 
-
-		virtual Type Type() = 0;
+		EventType Type() { return type; }
+	private:
+		EventType type;
 	};
 
 	class ResizeEvent : public Event
@@ -28,8 +48,6 @@ namespace game {
 	public:
 		ResizeEvent(int width, int height);
 		~ResizeEvent();
-
-		virtual enum Type Type() { return Event::Resize; }
 
 		int GetWidth();
 		int GetHeight();
@@ -42,20 +60,24 @@ namespace game {
 	class MouseEvent : public Event
 	{
 	public:
-
-		enum MouseButton
-		{
-
-		};
-
-		MouseEvent(enum Type, MouseButton, int x, int y);
+		MouseEvent(EventType, MouseButton, std::vector<ModifierKeys>, int x, int y);
 		~MouseEvent();
 
 	private:
-		enum Type type;
 		MouseButton mouse_button;
+		std::vector<ModifierKeys> modifier_keys;
 		int x;
 		int y;
 	};
 
+	class KeyEvent : public Event
+	{
+	public:
+		KeyEvent(EventType, Keys, std::vector<ModifierKeys>);
+		~KeyEvent();
+
+	private:
+		Keys key;
+		std::vector<ModifierKeys> modifier_keys;
+	};
 }
