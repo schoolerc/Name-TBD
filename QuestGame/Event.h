@@ -18,7 +18,9 @@ namespace game {
 
 	enum MouseButton
 	{
-
+		Left,
+		Middle,
+		Right
 	};
 
 	enum ModifierKeys
