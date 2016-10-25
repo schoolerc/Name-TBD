@@ -1,19 +1,23 @@
 #pragma once
 #include <Windows.h>
-#undef CreateWindow
 namespace game
 {
-	struct Window {
+	class Game;
+	class Window
+	{
+	public:
+		Window(Game*);
+		~Window();
+
+
+	private:
+		Game* game;
 		HWND handle;
 		HDC device_context;
 		HGLRC opengl_context;
-	};
-	
-	struct WindowConfiguration {
-		int width, height;
-	};
 
-	void RegisterWindowClass;
+		static LRESULT __stdcall WindowProcedure(HWND, UINT, WPARAM, LPARAM);
+		long WindowProcedure(UINT, WPARAM, LPARAM);
 
-	Window CreateWindow(WindowConfiguration);
+	};
 }
