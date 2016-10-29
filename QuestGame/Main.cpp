@@ -2,8 +2,13 @@
 #include <stdexcept>
 #include <string>
 #include <gl/glew.h>
-#include <Windows.h>
-#include <wingdi.h>
+
+#include "Window.h"
+#include "Game.h"
+
+using game::Game;
+using game::Window;
+
 static bool running = true;
 
 void __stdcall DebugProc(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
@@ -26,6 +31,7 @@ LRESULT __stdcall MainWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 int __stdcall WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
 {
 	try {
+		/*
 		AllocConsole();
 		WNDCLASSEX wndclass;
 		memset(&wndclass, 0, sizeof(wndclass));
@@ -94,6 +100,17 @@ int __stdcall WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
 			{
 				delta = -delta;
 			}
+		}
+		*/
+
+		Game game;
+		Window window(&game);
+		window.Create(game.GetWindowConfiguration());
+		window.Show();
+
+		while (game.IsRunning()) 
+		{
+			window.PumpMessages();
 		}
 	}
 	catch(std::exception& ex){

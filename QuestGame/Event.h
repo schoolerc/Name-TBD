@@ -10,8 +10,8 @@ namespace game {
 		MouseButtonRelease,
 		MouseMove,
 		MouseDoubleClick,
-		KeyPress,
-		KeyRelease,
+		KeyDown,
+		KeyUp,
 		Update,
 		Render
 	};
@@ -28,7 +28,7 @@ namespace game {
 
 	};
 
-	enum Keys
+	enum Key
 	{
 
 	};
@@ -65,6 +65,11 @@ namespace game {
 		MouseEvent(EventType, MouseButton, std::vector<ModifierKeys>, int x, int y);
 		~MouseEvent();
 
+		MouseButton GetMouseButton();
+		std::vector<ModifierKeys> GetModifierKeys();
+		int GetX();
+		int GetY();
+
 	private:
 		MouseButton mouse_button;
 		std::vector<ModifierKeys> modifier_keys;
@@ -75,11 +80,25 @@ namespace game {
 	class KeyEvent : public Event
 	{
 	public:
-		KeyEvent(EventType, Keys, std::vector<ModifierKeys>);
+		KeyEvent(EventType, Key, std::vector<ModifierKeys>);
 		~KeyEvent();
 
+		Key GetKey();
+		std::vector<ModifierKeys> GetModifierKeys();
+
 	private:
-		Keys key;
+		Key key;
 		std::vector<ModifierKeys> modifier_keys;
+	};
+
+	class UpdateEvent : public Event
+	{
+	public:
+		UpdateEvent(double delta);
+		~UpdateEvent();
+
+		double GetDelta();
+	private:
+		double delta;
 	};
 }

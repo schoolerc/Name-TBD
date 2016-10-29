@@ -1,8 +1,8 @@
 #include "WindowConfiguration.h"
 
-#include <fstream>
+#include <rapidjson/document.h>
 
-#include <rapidjson\document.h>
+#include "Utility.h"
 
 namespace game {
 
@@ -55,15 +55,18 @@ namespace game {
 		title = t;
 	}
 
-	void WindowConfiguration::Load(const std::string& path)
+	void WindowConfiguration::Load(const std::string& filename)
 	{
-		std::ifstream config_stream(path);
-		rapidjson::Document document;
-		document.ParseStream(config_stream);
+		using namespace rapidjson;
+		Document doc;
 
-		width = document["width"].GetInt();
-		height = document["height"].GetInt();
-		fullscreen = document["fullscreen"].GetInt();
-		title = document["title"].GetString();
+		std::string raw_config = std::move(GetFileContents(filename));
+
+		doc.Parse(raw_config.c_str());
+
+		width = doc["width"].GetInt();
+		height = doc["height"].GetInt();
+		fullscreen = doc["fullscreen"].GetBool();
+		title = doc["title"].GetString();
 	}
 }

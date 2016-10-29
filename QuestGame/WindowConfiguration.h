@@ -2,15 +2,16 @@
 
 #include <string>
 
-namespace game {
+namespace game 
+{
 	class WindowConfiguration
 	{
 	public:
 		WindowConfiguration();
 		~WindowConfiguration();
 
-		void Load(const std::string& path);
-		void Save(const std::string& path);
+		void Load(const std::string& filename);
+		void Save(const std::string& filename);
 
 		int GetWidth();
 		int GetHeight();
