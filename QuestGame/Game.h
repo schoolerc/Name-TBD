@@ -10,6 +10,7 @@ namespace game {
 
 	enum class GameState
 	{
+		Empty,
 		Starting,
 		MainMenu,
 		Loading,
@@ -30,6 +31,9 @@ namespace game {
 		bool IsRunning();
 		void Event(Event*);
 
+		void SetGameState(GameState);
+		GameState GetGameState();
+
 	protected:
 		void ResizeEvent(ResizeEvent*);
 		void UpdateEvent(UpdateEvent*);
@@ -47,6 +51,8 @@ namespace game {
 		const std::string window_configuration_path;
 
 		bool running = true;
+
+		GameState state = GameState::Empty;
 
 	};
 

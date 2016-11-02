@@ -1,8 +1,11 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 #include <Windows.h>
+
+#include "Event.h"
 
 namespace game
 {
@@ -33,6 +36,9 @@ namespace game
 		static LRESULT __stdcall WindowProcedure(HWND, UINT, WPARAM, LPARAM);
 		long WindowProcedure(UINT, WPARAM, LPARAM);
 
-		void CheckError();
+		std::shared_ptr<Event> ConstructGameEvent(UINT, WPARAM, LPARAM);
+		std::shared_ptr<MouseEvent> ConstructMouseEvent(UINT, WPARAM, LPARAM);
+		std::shared_ptr<KeyEvent> ConstructKeyEvent(UINT, WPARAM, LPARAM);
+		std::shared_ptr<ResizeEvent> ConstructResizeEvent(UINT, WPARAM, LPARAM);
 	};
 }

@@ -4,6 +4,7 @@
 
 #include "WindowConfiguration.h"
 #include "Utility.h"
+#include "Game.h"
 
 namespace game
 {
@@ -22,9 +23,9 @@ namespace game
 		if (message == WM_CREATE)
 		{
 			window = (Window*)((CREATESTRUCTA*)l)->lpCreateParams;
-			SetWindowLongA(handle, GWL_USERDATA, (long)window);
+			SetWindowLongA(handle, GWLP_USERDATA, (long)window);
 		}
-		window = (Window*)GetWindowLongA(handle, GWL_USERDATA);
+		window = (Window*)GetWindowLongA(handle, GWLP_USERDATA);
 
 		if (window != nullptr)
 		{
@@ -36,17 +37,38 @@ namespace game
 		}
 	}
 
-	long Window::WindowProcedure(UINT message, WPARAM w, LPARAM l)
+	std::shared_ptr<Event> Window::ConstructGameEvent(UINT message, WPARAM w, LPARAM l)
 	{
 		switch (message)
 		{
-		case WM_NCCREATE:
-			return 1;
-		case WM_CREATE:
-			return 0;
+		case WM_MOUSEMOVE:
+		case WM_LBUTTONDOWN:
+		case WM_LBUTTONUP:
+		case WM_LBUTTONDBLCLK:
+		case WM_RBUTTONDOWN:
+		case WM_RBUTTONUP:
+		case WM_RBUTTONDBLCLK:
+		case WM_MBUTTONDOWN:
+		case WM_MBUTTONUP:
+		case WM_MBUTTONDBLCLK:
+			return ConstructMouseEvent(message, w, l);
+
+		case WM_KEYDOWN:
+		case WM_KEYUP:
+			return ConstructKeyEvent(message, w, l);
+
 		case WM_SIZE:
-			return 1;
+			return ConstructResizeEvent(message, w, l);
+
+		default:
+			return nullptr;
 		}
+	}
+
+	long Window::WindowProcedure(UINT message, WPARAM w, LPARAM l)
+	{
+		std::shared_ptr<Event> event = ConstructGameEvent(message, w, l);
+		game->Event(event.get());
 	}
 
 	void Window::Create(WindowConfiguration* window_configuration)
